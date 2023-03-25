@@ -5,22 +5,22 @@
 #include "sources/card.hpp"
 #include <string>
 
-TEST_CASE("The wished player has been created") { //1
+TEST_CASE("The wished player has been created") {
     ariel::Player player("Avner");
     CHECK(player.getName() == "Avner");
 }
 
-TEST_CASE("Initial STACK SIZE of player before entering a game is 0") { //2
+TEST_CASE("Initial STACK SIZE of player before entering a game is 0") { 
     ariel::Player player("Avner");
     CHECK(player.stacksize() == 0);
 }
 
-TEST_CASE("Initial CARDS TAKEN of player before entering a game is 0") { //3
+TEST_CASE("Initial CARDS TAKEN of player before entering a game is 0") { 
     ariel::Player player("Avner");
     CHECK(player.cardesTaken() == 0);
 }
 
-TEST_CASE("STACK SIZE is always in the range (0,26) included") { //4
+TEST_CASE("STACK SIZE is always in the range (0,26) included") { 
     ariel::Player p1("Avner");
     CHECK(p1.stacksize() >= 0);
     CHECK(p1.stacksize() <= 26);
@@ -36,7 +36,7 @@ TEST_CASE("STACK SIZE is always in the range (0,26) included") { //4
     }
 }
 
-TEST_CASE("CARDS TAKEN is always in the range (0,26) included") { //5
+TEST_CASE("CARDS TAKEN is always in the range (0,26) included") {
     ariel::Player p1("Avner");
     CHECK(p1.cardesTaken() >= 0);
     CHECK(p1.cardesTaken() <= 26);
@@ -52,7 +52,7 @@ TEST_CASE("CARDS TAKEN is always in the range (0,26) included") { //5
     }
 }
 
-TEST_CASE("The wished players are fields of a given game") { //6
+TEST_CASE("The wished players are fields of a given game") {
     ariel::Player p1("Avner");
     ariel::Player p2("Benny");
     ariel::Game game(p1, p2);
@@ -61,7 +61,7 @@ TEST_CASE("The wished players are fields of a given game") { //6
     CHECK(game.getPlayer2().getName() == p2.getName());
 }
 
-TEST_CASE("When the game begins the deck is shuffled correctly - each player gets half of the cards") { //7
+TEST_CASE("When the game begins the deck is shuffled correctly - each player gets half of the cards") {
     ariel::Player p1("Alice");
     ariel::Player p2("Bob");
     ariel::Game game(p1, p2);
@@ -70,7 +70,7 @@ TEST_CASE("When the game begins the deck is shuffled correctly - each player get
     CHECK(p2.stacksize() == 26);
 }
 
-TEST_CASE("When the game ends each player has no cards") { //8
+TEST_CASE("When the game ends each player has no cards") {
     ariel::Player p1("Alice");
     ariel::Player p2("Bob");
     ariel::Game game(p1, p2);
@@ -81,7 +81,7 @@ TEST_CASE("When the game ends each player has no cards") { //8
     CHECK(p2.stacksize() == 0);
 }
 
-TEST_CASE("After each turn there are still 52 cards") { //9
+TEST_CASE("After each turn there are still 52 cards") {
     ariel::Player p1("Alice");
     ariel::Player p2("Bob");
     ariel::Game game(p1, p2);
@@ -92,7 +92,7 @@ TEST_CASE("After each turn there are still 52 cards") { //9
     CHECK((p1.cardesTaken() + p1.stacksize() + p2.cardesTaken() + p2.stacksize()) == 52);
 }
 
-TEST_CASE("PlayTurn() reduces 1 or 3 cards of each STACK SIZE") { //10
+TEST_CASE("PlayTurn() reduces 1 or 3 cards of each STACK SIZE") {
     ariel::Player p1("Alice");
     ariel::Player p2("Bob");
     ariel::Game game(p1, p2);
@@ -108,7 +108,7 @@ TEST_CASE("PlayTurn() reduces 1 or 3 cards of each STACK SIZE") { //10
     }
 }
 
-TEST_CASE("PlayTurn() grants 2 or 6 cards to specific CARDS TAKEN") { // original 1 or 3 and the other 1 or 3 //11
+TEST_CASE("PlayTurn() grants 2 or 6 cards to specific CARDS TAKEN") { // original 1 or 3 and the other 1 or 3
     ariel::Player p1("Alice");
     ariel::Player p2("Bob");
     ariel::Game game(p1, p2);
@@ -126,7 +126,7 @@ TEST_CASE("PlayTurn() grants 2 or 6 cards to specific CARDS TAKEN") { // origina
     }
 }
 
-TEST_CASE("After the whole game there are still 52 cards") { //12
+TEST_CASE("After the whole game there are still 52 cards") {
     ariel::Player p1("Alice");
     ariel::Player p2("Bob");
     ariel::Game game(p1, p2);
@@ -151,7 +151,3 @@ TEST_CASE("Printing turns and logs is possible only after the first turn") {
   CHECK_THROWS(game.printLastTurn()); // should throw exeption cuz there wasn't turns yet.
   CHECK_THROWS(game.printLog());
 }
-
-
-
-//card are done in the middle of the game
