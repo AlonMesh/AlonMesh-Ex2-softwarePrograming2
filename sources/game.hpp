@@ -2,11 +2,12 @@
     #define GAME_H
 
     #include "player.hpp"
+    #include <vector>
 
     namespace ariel {
         class Game {
         public:
-            Game(ariel::Player p1, ariel::Player p2);
+            Game(ariel::Player &p1, ariel::Player &p2);
             ~Game();
 
             void playTurn();
@@ -16,12 +17,21 @@
             void printLog();
             void printStats();
 
-            ariel::Player getPlayer1();
-            ariel::Player getPlayer2();
+            void Game::printDeck();
+
+            Player getPlayer1();
+            Player getPlayer2();
 
         private:
-            ariel::Player p1;
-            ariel::Player p2;
+            void startGame();
+            void splitCards();
+            void shuffle();
+
+            std::vector<std::string> gameHistory;
+
+            Player& p1;
+            Player& p2;
+            std::vector<Card> deck;
         };
     }
     #endif
