@@ -1,27 +1,37 @@
-#ifndef PLAYER_H
-#define PLAYER_H
-#include "game.hpp"
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 #include "card.hpp"
+#include "game.hpp"
 #include <string>
 #include <vector>
+using namespace std;
 
 namespace ariel {
     class Player {
         public:
-            Player(std::string name);
+            Player(string name);
+            Player();
+            Player(const Player& other);
+            Player& operator=(const Player& other);
+            Player(Player&& other) noexcept;
+            Player& operator=(Player&& other) noexcept;
             ~Player();
             
             int stacksize();
             int cardesTaken();
-            std::string getName();
+            string getName();
             void setHandSize(int size);
+            void addCardsTaken(int cards);
+            vector<Card>& getHand();
+            void dropCard();
 
-            int handSize;
-            int cardsTaken;
-            std::vector<ariel::Card> hand;
 
         private:
-            std::string name;
+            string name;
+            int handSize;
+            int cardsTaken;
+            vector<Card> hand;
+
     };
 }
 

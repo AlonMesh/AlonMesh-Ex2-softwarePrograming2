@@ -1,6 +1,8 @@
 #ifndef CARD_H
 #define CARD_H
 #include <string>
+#include "game.hpp"
+#include "player.hpp"
 
 namespace ariel {
 
@@ -31,7 +33,13 @@ enum class CardShape {
 
     class Card {
     public:
+    // I got helped by the internet - I read that I need those function (till ~Card()) to avoid error via tidy
+        Card();
         Card(CardRank rank, CardShape shape);
+        Card(const Card& other);
+        Card& operator=(const Card& other);
+        Card(Card&& other) noexcept;
+        Card& operator=(Card&& other) noexcept;
         ~Card();
 
         int getRank();

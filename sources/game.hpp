@@ -1,13 +1,22 @@
-    #ifndef GAME_H
-    #define GAME_H
+#ifndef GAME_HPP
+#define GAME_HPP
 
-    #include "player.hpp"
-    #include <vector>
+namespace ariel { class Player; class Card; }
+#include "card.hpp"
+#include <vector>
+using namespace std;
 
-    namespace ariel {
-        class Game {
+namespace ariel {
+    using namespace ariel;
+
+    class Game {
         public:
-            Game(ariel::Player &p1, ariel::Player &p2);
+            Game();
+            Game(Player& player1, Player& player2);
+            Game(const Game& other); // Declaration of the copy constructor
+            Game& operator=(const Game& other);
+            Game(Game&& other) noexcept;
+            Game& operator=(Game&& other) noexcept;
             ~Game();
 
             void playTurn();
@@ -16,8 +25,7 @@
             void printWiner();
             void printLog();
             void printStats();
-
-            void Game::printDeck();
+            void printDeck(); // Mine
 
             Player getPlayer1();
             Player getPlayer2();
@@ -27,11 +35,13 @@
             void splitCards();
             void shuffle();
 
-            std::vector<std::string> gameHistory;
-
+            vector<string> gameHistory;
             Player& p1;
             Player& p2;
-            std::vector<Card> deck;
-        };
-    }
-    #endif
+            vector<Card> deck;
+            bool isOn;
+            int roundWins1;
+            int roundWins2;
+    };
+}
+#endif
