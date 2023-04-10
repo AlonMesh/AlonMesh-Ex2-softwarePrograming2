@@ -8,10 +8,10 @@ using namespace std;
 #include <vector>
 #include <random>
 namespace ariel {
-    Player p1_("");
-    Player p2_("");
+    Player fakePlayer1("");
+    Player fakePlayer2("");
 
-    Game::Game() : p1(p1_), p2(p2_), isOn(false) {}
+    Game::Game() : p1(fakePlayer1), p2(fakePlayer2), isOn(false) {}
 
     Game::Game(Player& p1, Player& p2) : p1(p1), p2(p2), isOn(false) {
         this->p1.setHandSize(26);
@@ -31,7 +31,7 @@ namespace ariel {
         return *this;
     }
 
-    Game::Game(Game&& other) noexcept : p1(p1_), p2(p2_), isOn(other.isOn) {}
+    Game::Game(Game&& other) noexcept : p1(fakePlayer1), p2(fakePlayer2), isOn(other.isOn) {}
 
 
     Game& Game::operator=(Game&& other) noexcept {
@@ -46,7 +46,8 @@ namespace ariel {
     
     Game::~Game() {}
 
-    void Game::startGame() {
+    // I consulted with Ori Ekshtein about creating, shuffling and spliting the deck - we thought about the logic togther
+    void Game::startGame() { 
         // Creating new deck
         for(int i=0; i <= 3; i++) {
             for(int j=1; j <= 13; j++) {
@@ -63,11 +64,11 @@ namespace ariel {
 
         // Generage a random number x in [1,5].
         // Then, split x cards for each player till there are less than x cards in the deck.
-        // Combine to the deck each player's hand by its new order. repeat x200.
+        // Combine to the deck each player's hand by its new order. repeat 2000 times.
         random_device rd;
         mt19937 gen(rd());
         uniform_int_distribution<> distr(1, 5);
-//
+
         for (int i = 0; i < 2000; i++) {
 
             int random_num = distr(gen);
@@ -114,7 +115,7 @@ namespace ariel {
 
     void Game::printDeck() {
         for (Card& card : this->deck) {
-        std::cout << card.getRank() << std::endl;
+            cout << card.getRank() << endl;
         }
     }
 
@@ -129,7 +130,7 @@ namespace ariel {
             throw runtime_error("The game is already over");
         }
 
-        // The game is ON only when calling the first turn
+        // Turning the game ON only when calling the function in the first tiime
         if (this->isOn == false) {
             this->isOn = true;
             startGame();
@@ -153,13 +154,15 @@ namespace ariel {
         turnLog += this->p1.getName() + " played " + to_string(card1.getRank()) + " of " + card1.getShapeName() + " ";
         turnLog += this->p2.getName() + " played " + to_string(card2.getRank()) + " of " + card2.getShapeName() + ". ";
 
-        if (card1.getRank() > card2.getRank()) {
+        // According to the rules, the winner is the player that have the higher card BUT 2 beats Ace. 
+        if (((card1.getRank() > card2.getRank()) || (card1.getRank() == 2 && card2.getRank() == 14))
+        && (card1.getRank() != 14 && card2.getRank() != 2)) {
             this->p1.addCardsTaken(2);
             this->roundWins1++;
             turnLog += this->p1.getName() + " wins.";
         }
 
-        else if (card1.getRank() < card2.getRank()) {
+        else if ((card1.getRank() < card2.getRank()) || (card1.getRank() == 14 && card2.getRank() == 2)) {
             this->p2.addCardsTaken(2);
             this->roundWins2++;
             turnLog += this->p2.getName() + " wins.";
@@ -259,25 +262,15 @@ namespace ariel {
     void Game::printStats() {     
         double totalRounds = static_cast<double>((this->roundWins1 + this->roundWins2));
 
-        // Estimate each player's current number of cards in hand
-        int p1Cards = 26 - this->p1.stacksize() - this->roundWins1 + this->p1.cardesTaken();
-        int p2Cards = 26 - this->p2.stacksize() - this->roundWins2 + this->p2.cardesTaken();
-
-        // Estimate the probability of each player winning
-        double p1WinProb = static_cast<double>(p1Cards) / 52;
-        double p2WinProb = static_cast<double>(p2Cards) / 52;
-
         cout << this->p1.getName() << "'s stats:" << endl;
         cout << "\tWin rate: " << to_string(static_cast<double>(this->roundWins1) / totalRounds) << "%" << endl;
         cout << "\tCards won: " << to_string(this->p1.cardesTaken()) << endl;
         cout << "\tRounds won: " << to_string(this->roundWins1) << endl;
-        cout << "\tChance to win: " << to_string(p1WinProb * 100) << "%" << endl;
 
         cout << this->p2.getName() << "'s stats:" << endl;
         cout << "\tWin rate: " << to_string(static_cast<double>(this->roundWins2) / totalRounds) << "%" << endl;
         cout << "\tCards won: " << to_string(this->p2.cardesTaken()) << endl;
         cout << "\tRounds won: " << to_string(this->roundWins2) << endl;
-        cout << "\tChance to win: " << to_string(p2WinProb * 100) << "%" << endl;
 
         int drawAmount = (26 - this->p1.stacksize() - this->roundWins1 - this->roundWins2) / 2;
         double drawRate = static_cast<double>(drawAmount) / (this->roundWins1 + this->roundWins2 + drawAmount);
@@ -285,7 +278,7 @@ namespace ariel {
         cout << "Game stats:" << endl;
         cout << "\tDraw rate: " << to_string(drawRate) << "%, draws amount: " << to_string(drawAmount) << endl;
         cout << "\tRounds played: " << this->roundWins1 + this->roundWins2 << endl;
-        cout << "\tEach player has " << this->p1.stacksize() << " more cards in his hand" << endl;
+        cout << "\tCards left: " << this->p1.stacksize() << endl;
     }
 
     Player Game::getPlayer1() {return this->p1;}

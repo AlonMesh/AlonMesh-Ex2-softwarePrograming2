@@ -46,6 +46,10 @@ namespace ariel {
 
     int Card::getRank() {
         int rankValue = static_cast<int>(this->rank);
+        if (rankValue == 1) {
+            // Let Ace ranked highest
+            rankValue = 14;
+        }
         return rankValue;
     }
 

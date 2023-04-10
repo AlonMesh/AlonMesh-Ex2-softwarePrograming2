@@ -19,21 +19,40 @@ namespace ariel {
             Game& operator=(Game&& other) noexcept;
             ~Game();
 
+            // Play a round in the game
             void playTurn();
+            
+            // Print the turnLog
             void printLastTurn();
-            void playAll();
-            void printWiner();
-            void printLog();
-            void printStats();
-            void printDeck(); // Mine
 
+            // Play all games till the game is over
+            void playAll();
+
+            // Print the name of the winner (or the player in charge)
+            void printWiner();
+
+            // Print all turnLog so far
+            void printLog();
+
+            // Print statistics about the game, such as winrate for each player and total draws
+            void printStats();
+
+            // Print the cards
+            void printDeck();
+
+            // Returns a referance for each player
             Player getPlayer1();
             Player getPlayer2();
 
         private:
+            // Creating an ordered and ligel deck
             void startGame();
-            void splitCards();
+
+            // Shuffling an ordered (or not) deck and order it randomly
             void shuffle();
+
+            // Split cards for each player
+            void splitCards();
 
             vector<string> gameHistory;
             Player& p1;

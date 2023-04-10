@@ -42,9 +42,10 @@ enum class CardShape {
         Card& operator=(Card&& other) noexcept;
         ~Card();
 
+        // Returns the rank of a card as an int
         int getRank();
-        std::string getRankName();
-        CardShape getShape();
+
+        // Returns the shape of a card as a string
         std::string getShapeName();
 
     private:
